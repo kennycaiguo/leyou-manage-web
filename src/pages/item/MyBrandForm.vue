@@ -49,10 +49,12 @@
           // 定义一个请求参数对象，通过解构表达式来获取brand中的属性
           const {categories, ...rest} = this.brand;
           // 数据库中只要保存分类的id即可，因此我们对categories的值进行处理,只保留id，并转为字符串
-          rest.categories = categories.map(c => c.id);
-          this.$http.post("/item/brand",rest).then(resp =>{
-
-          }).catch(()=>{
+          rest.categories = categories.map(c => c.id).join(",");
+          //将对象转换成字符串 让axios提交表单类型的请求  而不是json请求
+          this.$http.post("/item/brand/save",this.$qs.stringify(rest)).then(resp =>{
+            console.log(resp);
+          }).catch(resp=>{
+            alert(resp);
             console.log("新增失败");
           })
         }

@@ -16,7 +16,7 @@
       <v-flex>
         <v-upload
           v-model="brand.image"
-          url="/upload"
+          url="/upload/image"
           :multiple="false"
         />
       </v-flex>

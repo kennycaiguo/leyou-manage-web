@@ -49,7 +49,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text class="primary--text px-5">
-          <my-brand-form/>
+          <my-brand-form @close="closeWindow"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -139,6 +139,12 @@
         }).catch();
 
         this.loading = false;
+      },
+      closeWindow(){
+        // 重新加载数据
+        this.getDataFromServer();
+        // 关闭窗口
+        this.show = false;
       }
     }
   }

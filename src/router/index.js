@@ -27,7 +27,7 @@ export default new Router({
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/myBrand",'/item/MyBrand',"MyBrand"),
         route("/item/list",'/item/Goods',"Goods"),
-        route("/item/specification",'/item/specification/Specification',"Specification"),
+        route("/item/specification",'/item/Specification',"Specification"),
         route("/user/statistics",'/item/Statistics',"Statistics"),
         route("/trade/promotion",'/trade/Promotion',"Promotion")
       ]

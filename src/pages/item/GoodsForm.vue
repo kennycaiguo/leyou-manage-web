@@ -301,12 +301,12 @@
         })
         .then(() => {
           this.$message.success("提交商品成功！");
-          this.$emit("closeForm")
+          this.$emit("close")
         })
         .catch((e) => {
           console.log(e)
           this.$message.error("提交商品失败！");
-          this.$emit("closeForm")
+          this.$emit("close")
         })
       }
     },

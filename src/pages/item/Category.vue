@@ -22,17 +22,25 @@
     },
     methods: {
       handleAdd(node) {
-        console.log("add .... ");
-        console.log(node);
+        this.$http.post("/item/category", {
+          isParent: node.isParent,
+          name: node.name,
+          parentId: node.parentId,
+          sort: node.sort
+        }).then(() => {
+          location.reload();
+        });
       },
       handleEdit(id, name) {
-        console.log("edit... id: " + id + ", name: " + name)
+        this.$http.put("/item/category/" + id, {
+          name
+        });
       },
       handleDelete(id) {
-        console.log("delete ... " + id)
+        this.$http.delete("/item/category/" + id);
       },
       handleClick(node) {
-        console.log(node)
+        //console.log(node)
       }
     }
   };

@@ -43,10 +43,10 @@
         <td class="text-xs-center">{{ props.item.bname }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editGoods(props.item)">
-            <i class="el-icon-edit"/>
+            <i class="el-icon-edit"></i>
           </v-btn>
           <v-btn icon>
-            <i class="el-icon-delete"/>
+            <i class="el-icon-delete"></i>
           </v-btn>
           <v-btn icon v-if="props.item.saleable">下架</v-btn>
           <v-btn icon v-else>上架</v-btn>
@@ -166,7 +166,6 @@
         this.oldGoods = oldGoods;
       },
       closeWindow() {
-        console.log(1)
         // 重新加载数据
         this.getDataFromServer();
         // 关闭窗口

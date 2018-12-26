@@ -243,12 +243,12 @@
       submit() {
         // goods中的商品分类id
         if (!this.goods.categories || this.goods.categories.length < 3) {
-          this.$message.error("商品分类填写不正确！")
+          this.$message.error("商品分类填写不正确！");
           return;
         }
         // sku信息
         if (!this.skus || this.skus.length <= 0) {
-          this.$message.error("请填写sku信息！")
+          this.$message.error("请填写sku信息！");
           return;
         }
         this.goods['cid1'] = this.goods.categories[0].id;
@@ -260,7 +260,7 @@
           if (t.options.length > 0) {
             obj[t.k] = t.options;
           }
-        })
+        });
         this.goods.spuDetail.specTemplate = JSON.stringify(obj);
 
         // 对全局规格参数进行深拷贝
@@ -272,7 +272,7 @@
               p.options = this.skuTemplate[p.k];
             }
           })
-        })
+        });
         // 处理全局规格参数
         this.goods.spuDetail.specifications = JSON.stringify(specs);
         this.goods.spuDetail.specifications = JSON.stringify(this.specifications);
@@ -292,7 +292,7 @@
             indexes,
             stock: this.$format(stock)
           }
-        })
+        });
         // 发起请求
         this.$http({
           url: "/item/goods",
@@ -304,7 +304,7 @@
           this.$emit("close")
         })
         .catch((e) => {
-          console.log(e)
+          console.log(e);
           this.$message.error("提交商品失败！");
           this.$emit("close")
         })
@@ -317,7 +317,11 @@
           if (val == null || !this.isEdit) {
             return;
           }
+          console.log(val);
+          console.log(this);
+
           // 实现数据回显
+          this.goods = JSON.parse(JSON.stringify(val));
           Object.deepCopy(val, this.goods)
         }
       },
@@ -328,7 +332,7 @@
           this.$http.get("/item/brand/cid/" + val[2].id)
           .then(resp => {
             this.brandOptions = resp.data;
-          })
+          });
           // 根据分类加载规格参数
           this.$http.get("/item/spec/" + val[2].id)
           .then(resp => {
@@ -345,7 +349,7 @@
                   this.template.push({
                     k: p.k,
                     options: p.options
-                  })
+                  });
                   this.skuTemplate.push({
                     k: p.k,
                     options: []
@@ -410,22 +414,22 @@
           // 生成表内容
           this.headers = [
             {text: 'price', align: 'center', sortable: false, value: 'name'},
-          ]
+          ];
           // 生成表头
           this.headers = [];
           if (this.skus.length > 0) {
             Object.keys(this.skus[0]).forEach(text => {
               let width = "80";
-              if (text == "indexes") {
+              if (text === "indexes") {
                 return
               }
-              if (text == "price") {
+              if (text === "price") {
                 text = "价格";
                 width = "50";
-              } else if (text == "stock") {
+              } else if (text === "stock") {
                 text = "库存";
                 width = "50";
-              } else if (text == "enable") {
+              } else if (text === "enable") {
                 text = "是否启用";
                 width = "30";
               }

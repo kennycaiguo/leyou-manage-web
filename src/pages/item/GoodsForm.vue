@@ -264,18 +264,21 @@
         this.goods.spuDetail.specTemplate = JSON.stringify(obj);
 
         // 对全局规格参数进行深拷贝
-        const specs = [];
-        Object.deepCopy(this.specifications, specs);
+        const specs = JSON.parse(JSON.stringify(this.specifications));
+        const skuTemplate = new Map();
+        this.skuTemplate.forEach(s => {
+          skuTemplate.set(s.k, s.options);
+        });
         specs.forEach(({params}) => {
           params.forEach(p => {
             if (!p.global) {
-              p.options = this.skuTemplate[p.k];
+              p.options = skuTemplate.get(p.k);
             }
           })
         });
         // 处理全局规格参数
         this.goods.spuDetail.specifications = JSON.stringify(specs);
-        this.goods.spuDetail.specifications = JSON.stringify(this.specifications);
+        //this.goods.spuDetail.specifications = JSON.stringify(this.specifications);
         // 封装sku信息
         this.goods['skus'] = this.skus.filter(s => s.enable).map(s => {
           const {price, stock, enable, indexes, images, ...skuSpecs} = s;
@@ -324,10 +327,7 @@
       },
       'goods.categories': {
         deep: true,
-        handler(val, old) {
-          console.log(val);
-          console.log(old);
-
+        handler(val) {
           // 根据分类加载品牌信息
           this.$http.get("/item/brand/cid/" + val[2].id)
           .then(resp => {

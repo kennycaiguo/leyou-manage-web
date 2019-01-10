@@ -45,7 +45,7 @@
           <v-btn icon @click="editGoods(props.item)">
             <i class="el-icon-edit"></i>
           </v-btn>
-          <v-btn icon>
+          <v-btn icon @click="deleteGoods(props.item.id)">
             <i class="el-icon-delete"></i>
           </v-btn>
           <v-btn icon v-if="props.item.saleable">下架</v-btn>
@@ -67,7 +67,8 @@
         </v-toolbar>
         <!--对话框的内容，表单-->
         <v-card-text class="px-3" style="height: 600px">
-          <goods-form :oldGoods="oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit" ref="goodsForm"/>
+          <goods-form :oldGoods="oldGoods" :step="step" @close="closeWindow" :is-edit="isEdit"
+                      ref="goodsForm"/>
         </v-card-text>
         <!--底部按钮，用来操作步骤线-->
         <v-card-actions class="elevation-10">
@@ -157,13 +158,28 @@
       async editGoods(oldGoods) {
         // 发起请求，查询商品详情和skus
         oldGoods.spuDetail = await this.$http.loadData("/item/spu/detail/" + oldGoods.id);
+        oldGoods.spuDetail.specTemplate = JSON.parse(oldGoods.spuDetail.specTemplate);
+        oldGoods.spuDetail.specifications = JSON.parse(oldGoods.spuDetail.specifications);
         oldGoods.skus = await this.$http.loadData("/item/sku/list?id=" + oldGoods.id);
+        //获得品牌信息
+        oldGoods.categories = await this.$http.loadData(
+          "/item/category/all/level" + "?id=" + oldGoods.cid3);
         // 修改标记
         this.isEdit = true;
         // 控制弹窗可见：
         this.show = true;
         // 获取要编辑的goods
         this.oldGoods = oldGoods;
+      },
+      deleteGoods(id) {
+        this.$http.delete("/item/goods?spuId=" + id).then(resp => {
+          if (resp.status === 200) {
+            this.getDataFromServer();
+            this.$message.success("删除商品成功");
+          } else {
+            this.$message.error("删除商品失败");
+          }
+        });
       },
       closeWindow() {
         // 重新加载数据
@@ -173,13 +189,13 @@
         // 将步骤调整到1
         this.step = 1;
       },
-      previous(){
-        if(this.step > 1){
+      previous() {
+        if (this.step > 1) {
           this.step--
         }
       },
-      next(){
-        if(this.step < 4 && this.$refs.goodsForm.$refs.basic.validate()){
+      next() {
+        if (this.step < 4 && this.$refs.goodsForm.$refs.basic.validate()) {
           this.step++
         }
       }

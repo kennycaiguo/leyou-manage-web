@@ -290,7 +290,7 @@
             price: this.$format(price),
             ownSpec: JSON.stringify(skuSpecs),
             indexes,
-            stock: this.$format(stock)
+            stock: stock
           }
         });
         // 发起请求
@@ -317,17 +317,17 @@
           if (val == null || !this.isEdit) {
             return;
           }
-          console.log(val);
-          console.log(this);
-
           // 实现数据回显
           this.goods = JSON.parse(JSON.stringify(val));
-          Object.deepCopy(val, this.goods)
+          Object.deepCopy(val, this.goods);
         }
       },
       'goods.categories': {
         deep: true,
-        handler(val) {
+        handler(val, old) {
+          console.log(val);
+          console.log(old);
+
           // 根据分类加载品牌信息
           this.$http.get("/item/brand/cid/" + val[2].id)
           .then(resp => {
@@ -392,7 +392,7 @@
           // 处理回显
           if (this.isEdit) {
             // 查询sku
-            this.$http.get("/item/goods/sku/list", {
+            this.$http.get("/item/sku/list", {
               params: {
                 id: this.goods.id
               }
@@ -403,7 +403,7 @@
                   if (sku.indexes === s.indexes) {
                     sku.id = s.id;
                     sku.price = this.$format(s.price);
-                    sku.stock = s.stock.stock;
+                    sku.stock = s.stock;
                     sku.images = s.images.split(",");
                     sku.enable = s.enable;
                   }
